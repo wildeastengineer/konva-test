@@ -1,0 +1,349 @@
+
+skeleton.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+ball
+  rotate: false
+  xy: 1063, 1838
+  size: 126, 126
+  orig: 126, 126
+  offset: 0, 0
+  index: -1
+skin_boy/vera_eye52
+  rotate: true
+  xy: 118, 1903
+  size: 61, 74
+  orig: 61, 74
+  offset: 0, 0
+  index: -1
+skin_boy/vera_eye62
+  rotate: true
+  xy: 335, 1876
+  size: 88, 102
+  orig: 88, 102
+  offset: 0, 0
+  index: -1
+skin_boy/verago_hand22
+  rotate: true
+  xy: 374, 1367
+  size: 254, 545
+  orig: 254, 545
+  offset: 0, 0
+  index: -1
+skin_boy/verago_leg12
+  rotate: true
+  xy: 255, 1655
+  size: 213, 293
+  orig: 213, 293
+  offset: 0, 0
+  index: -1
+skin_boy/verago_leg22
+  rotate: true
+  xy: 1737, 1773
+  size: 191, 251
+  orig: 191, 251
+  offset: 0, 0
+  index: -1
+skin_girl/vera_eye63
+  rotate: true
+  xy: 748, 1846
+  size: 118, 127
+  orig: 118, 127
+  offset: 0, 0
+  index: -1
+skin_girl/verago_hand23
+  rotate: true
+  xy: 921, 1295
+  size: 254, 545
+  orig: 254, 545
+  offset: 0, 0
+  index: -1
+skin_girl/verago_head32
+  rotate: false
+  xy: 877, 1841
+  size: 184, 123
+  orig: 184, 123
+  offset: 0, 0
+  index: -1
+skin_girl/verago_leg13
+  rotate: true
+  xy: 550, 1631
+  size: 213, 293
+  orig: 213, 293
+  offset: 0, 0
+  index: -1
+skin_girl/verago_leg23
+  rotate: true
+  xy: 1435, 1551
+  size: 247, 273
+  orig: 247, 273
+  offset: 0, 0
+  index: -1
+skin_girl2/br1
+  rotate: false
+  xy: 2, 1940
+  size: 51, 24
+  orig: 51, 24
+  offset: 0, 0
+  index: -1
+skin_girl2/br2
+  rotate: false
+  xy: 55, 1939
+  size: 61, 25
+  orig: 61, 25
+  offset: 0, 0
+  index: -1
+skin_girl2/verago_hand24
+  rotate: true
+  xy: 1468, 1268
+  size: 254, 545
+  orig: 254, 545
+  offset: 0, 0
+  index: -1
+skin_girl2/verago_head34
+  rotate: false
+  xy: 1539, 1800
+  size: 196, 164
+  orig: 196, 164
+  offset: 0, 0
+  index: -1
+skin_girl2/verago_leg14
+  rotate: true
+  xy: 845, 1623
+  size: 213, 293
+  orig: 213, 293
+  offset: 0, 0
+  index: -1
+skin_girl2/verago_leg24
+  rotate: true
+  xy: 1710, 1524
+  size: 247, 273
+  orig: 247, 273
+  offset: 0, 0
+  index: -1
+vera_brow1
+  rotate: false
+  xy: 194, 1895
+  size: 139, 69
+  orig: 139, 69
+  offset: 0, 0
+  index: -1
+vera_eye5
+  rotate: true
+  xy: 552, 1864
+  size: 100, 194
+  orig: 100, 194
+  offset: 0, 0
+  index: -1
+vera_eye6
+  rotate: true
+  xy: 2, 1432
+  size: 221, 370
+  orig: 221, 370
+  offset: 0, 0
+  index: -1
+vera_hair
+  rotate: false
+  xy: 2, 2
+  size: 808, 457
+  orig: 808, 457
+  offset: 0, 0
+  index: -1
+vera_horn1
+  rotate: true
+  xy: 1146, 896
+  size: 370, 742
+  orig: 370, 742
+  offset: 0, 0
+  index: -1
+vera_horn2
+  rotate: true
+  xy: 2, 621
+  size: 398, 714
+  orig: 398, 714
+  offset: 0, 0
+  index: -1
+vera_mouth1
+  rotate: false
+  xy: 1191, 1817
+  size: 172, 147
+  orig: 172, 147
+  offset: 0, 0
+  index: -1
+vera_mouth3
+  rotate: false
+  xy: 1365, 1817
+  size: 172, 147
+  orig: 172, 147
+  offset: 0, 0
+  index: -1
+verago_body2
+  rotate: false
+  xy: 1288, 180
+  size: 728, 714
+  orig: 728, 714
+  offset: 0, 0
+  index: -1
+verago_hand1
+  rotate: true
+  xy: 549, 1021
+  size: 272, 595
+  orig: 272, 595
+  offset: 0, 0
+  index: -1
+verago_hand2
+  rotate: true
+  xy: 2, 1111
+  size: 254, 545
+  orig: 254, 545
+  offset: 0, 0
+  index: -1
+verago_head7
+  rotate: false
+  xy: 718, 461
+  size: 568, 433
+  orig: 568, 433
+  offset: 0, 0
+  index: -1
+verago_lash
+  rotate: false
+  xy: 439, 1870
+  size: 111, 94
+  orig: 111, 94
+  offset: 0, 0
+  index: -1
+verago_leg1
+  rotate: true
+  xy: 1140, 1602
+  size: 213, 293
+  orig: 213, 293
+  offset: 0, 0
+  index: -1
+verago_leg2
+  rotate: true
+  xy: 2, 1702
+  size: 191, 251
+  orig: 191, 251
+  offset: 0, 0
+  index: -1
+
+skeleton2.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+skin_boy/verago_body12
+  rotate: false
+  xy: 2, 2
+  size: 913, 879
+  orig: 913, 879
+  offset: 0, 0
+  index: -1
+skin_girl/verago_body13
+  rotate: false
+  xy: 917, 2
+  size: 913, 879
+  orig: 913, 879
+  offset: 0, 0
+  index: -1
+verago_head3
+  rotate: false
+  xy: 2, 883
+  size: 1508, 548
+  orig: 1508, 548
+  offset: 0, 0
+  index: -1
+
+skeleton3.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+verago_head2
+  rotate: false
+  xy: 2, 2
+  size: 1654, 1757
+  orig: 1654, 1757
+  offset: 0, 0
+  index: -1
+
+skeleton4.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+verago_head6
+  rotate: false
+  xy: 2, 2
+  size: 1675, 1316
+  orig: 1675, 1316
+  offset: 0, 0
+  index: -1
+
+skeleton5.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+skin_boy/verago_head52
+  rotate: false
+  xy: 2, 2
+  size: 1473, 1226
+  orig: 1473, 1226
+  offset: 0, 0
+  index: -1
+
+skeleton6.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+skin_girl/verago_head53
+  rotate: false
+  xy: 2, 2
+  size: 1473, 1226
+  orig: 1473, 1226
+  offset: 0, 0
+  index: -1
+
+skeleton7.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+skin_girl2/verago_head54
+  rotate: false
+  xy: 2, 2
+  size: 1473, 1226
+  orig: 1473, 1226
+  offset: 0, 0
+  index: -1
+
+skeleton8.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+skin_girl2/verago_body14
+  rotate: true
+  xy: 2, 2
+  size: 913, 879
+  orig: 913, 879
+  offset: 0, 0
+  index: -1
+verago_body
+  rotate: true
+  xy: 883, 2
+  size: 913, 879
+  orig: 913, 879
+  offset: 0, 0
+  index: -1
+verago_head5
+  rotate: false
+  xy: 2, 917
+  size: 1275, 1009
+  orig: 1275, 1009
+  offset: 0, 0
+  index: -1
