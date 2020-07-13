@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Konva.js Test Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+    </style>
+    <script src="/konva-test/node_modules/gsap/umd/TweenMax.js"></script>
+    <script src="/konva-test/node_modules/gsap/umd/TweenMax.js"></script>
+    <script src="/konva-test/node_modules/konva/konva.min.js"></script>
+    <script src="/konva-test/libs/spine-canvas.js"></script>
+    <!--    <script src="/konva-test/libs/spine-player.js"></script>-->
+</head>
+<body>
+<div id="container"></div>
+<script>
+    const publicPath = '/konva-test/public/';
+
+    const containerWidth = window.innerWidth;
+    const containerHeight = window.innerHeight;
+
+    const spineManager = new spine.canvas.AssetManager();
+
+    const fpsCollectTime = 20000;
+
+    const vacaVersion = "vaca-x0.25";
+    const vacaResources = [
+        {type: "dat", url: getAnimationUrl(vacaVersion, "skeleton.atlas")},
+        {type: "dat", url: getAnimationUrl(vacaVersion, "skeleton.json")},
+        {type: "img", url: getAnimationUrl(vacaVersion, "skeleton.png")},
+    ];
+
+    if (vacaVersion === "vaca-x0.5") {
+        vacaResources.push({type: "img", url: getAnimationUrl(vacaVersion, "skeleton2.png")});
+    }
+
+
+    const stage = new Konva.Stage({
+        container: 'container',
+        width: containerWidth,
+        height: containerHeight,
+    });
+
+    const layer = new Konva.Layer();
+
+    const defaultPlayerScale = 0.15;
+    const defaultPlayerParams = {
+        name: vacaVersion,
+        skin: "vaca",
+        x: 100,
+        y: 100,
+        // width: 758,
+        // height: 1130,
+        scaleX: defaultPlayerScale,
+        scaleY: defaultPlayerScale,
+        anim: "hand",
+        animOffset: {
+            x: 0,
+            y: 0
+        },
+        speed: 0.3,
+        start: true
+    };
+
+    loadResources([].concat(vacaResources)).then(() => {
+
+        const w = 8;
+        const h = 1;
+
+        for (let j = 0; j < h; j++) {
+            for (let i = 0; i < w; i++) {
+                addAnimation(layer, Object.assign({}, defaultPlayerParams, {
+                    x: 100 + i * 60,
+                    y: 200 + j * 120,
+                    scaleX: -defaultPlayerScale
+                }));
+            }
+        }
+
+
+    });
+
+    let fpsList = [];
+    let fpsAv = 30;
+
+    let setFps = throttle((fps, fpsAv) => {
+        fpsList.push(fps);
+    }, 100);
+
+    setTimeout(() => {
+        console.log("fps", JSON.stringify(fpsList));
+    }, fpsCollectTime);
+
+    const fpsAnimation = new Konva.Animation(
+        (frame) => {
+            fpsAv = Math.round((fpsAv + frame.frameRate) / 2);
+            setFps(Math.round(frame.frameRate), fpsAv);
+        },
+        layer
+    );
+
+    fpsAnimation.start();
+
+    const renderers = {};
+
+    stage.add(layer);
+
+    function getAnimationUrl(animation, asset) {
+        return publicPath + `animations/${animation}/${asset}`;
+    }
+
+    function loadResources(resources) {
+        return Promise.all(resources.map(({type, url}) => {
+            if (type === "img") {
+                return loadImage(url)
+            } else {
+                return loadData(url)
+            }
+        }));
+
+        function loadImage(url) {
+            return new Promise((resolve, reject) => {
+                spineManager.loadTexture(url, resolve, reject)
+            });
+        }
+
+        function loadData(url) {
+            return new Promise((resolve, reject) => {
+                spineManager.loadText(url, resolve, reject)
+            });
+        }
+    }
+
+    function addAnimation(layer, params) {
+        const skeleton = getSkeleton(params);
+        const animationState = getAnimationState(skeleton, params.anim);
+
+        const group = new Konva.Group({
+            x: params.x,
+            y: params.y,
+            scaleX: params.scaleX,
+            scaleY: params.scaleY
+        });
+
+        const shape = new Konva.Shape({
+            timeDiff: 0,
+            sceneFunc: sceneFunc
+        });
+
+        group.add(shape);
+        layer.add(group);
+
+        refFunc(shape);
+
+        function sceneFunc(context, shape) {
+            animationState.update(params.speed * shape.getAttr("timeDiff"));
+            animationState.apply(skeleton);
+            skeleton.updateWorldTransform();
+
+            const skeletonRenderer = getSkeletonRenderer(context);
+
+            skeletonRenderer.draw(skeleton);
+        }
+
+        function refFunc(shape) {
+            if (!shape) {
+                return;
+            }
+
+            shape.setStrokeHitEnabled(false);
+            shape.shadowForStrokeEnabled(false);
+            shape.perfectDrawEnabled(false);
+
+            if (params.start) {
+                startAnimation(shape);
+            }
+        }
+
+        function startAnimation(shape) {
+            const animation = new Konva.Animation(
+                (frame) => {
+                    const timeDiff = frame.timeDiff / 1000;
+
+                    shape.setAttr("timeDiff", timeDiff);
+                },
+                shape.getLayer()
+            );
+
+            animation.start();
+        }
+
+        function getSkeletonRenderer(context) {
+            if (!renderers[context]) {
+                renderers[context] = new spine.canvas.SkeletonRenderer(context);
+                renderers[context].triangleRendering = false;
+            }
+
+            return renderers[context];
+        }
+
+        function getSkeleton({name, animOffset, skin}) {
+            const atlas = getAtlas(name);
+            const atlasLoader = new spine.AtlasAttachmentLoader(atlas);
+            const skeletonJson = new spine.SkeletonJson(atlasLoader);
+            const skeletonData = skeletonJson.readSkeletonData(spineManager.get(getAnimationUrl(name, "skeleton.json")));
+
+            const skeleton = new spine.Skeleton(skeletonData);
+
+            skeleton.scaleY = -1;
+            skeleton.x = animOffset.x;
+            skeleton.y = animOffset.y;
+            skeleton.setSkinByName(skin);
+            skeleton.setToSetupPose();
+
+            return skeleton;
+
+            function getAtlas(name) {
+                const atlasPath = publicPath + `animations/${name}/skeleton.atlas`;
+                const texture = spineManager.get(atlasPath);
+
+                return new spine.TextureAtlas(texture, (path) => {
+                    const absolutePath = getAnimationUrl(name, path);
+                    return spineManager.get(absolutePath)
+                });
+            }
+        }
+
+        function getAnimationState(skeleton, anim) {
+            const animationStateData = new spine.AnimationStateData(skeleton.data);
+
+            animationStateData.defaultMix = 0.2;
+
+            const animationState = new spine.AnimationState(animationStateData);
+
+            animationState.setAnimation(0, anim, true);
+
+            return animationState;
+        }
+    }
+
+    function addImage(layer, src, params) {
+        return new Promise((resolve) => {
+            const imageObj = new Image();
+
+            imageObj.onload = function () {
+                const image = new Konva.Image(Object.assign({image: this}, params));
+                layer.add(image);
+                layer.batchDraw();
+
+                resolve(image);
+            };
+
+            imageObj.src = src;
+        });
+    }
+
+    function throttle(func, ms) {
+        let isThrottled = false,
+            savedArgs,
+            savedThis;
+
+        function wrapper() {
+            if (isThrottled) {
+                savedArgs = arguments;
+                savedThis = this;
+                return;
+            }
+
+            func.apply(this, arguments);
+
+            isThrottled = true;
+
+            setTimeout(function () {
+                isThrottled = false;
+                if (savedArgs) {
+                    wrapper.apply(savedThis, savedArgs);
+                    savedArgs = savedThis = null;
+                }
+            }, ms);
+        }
+
+        return wrapper;
+    }
+
+    // ---
+
+    // let to  = {:bezier [{:x 1066, :y 284} {:x 960, :y 253} {:x 213, :y 940}], :duration 1.4}
+
+    function gsapTween(component, to) {
+        return new Promise((resolve) => {
+            const duration = to.duration;
+            const easeParams = [0.1, 0.4];
+            const animParams = Object.assign({}, to, {
+                ease: SlowMo.ease.config.apply(null, easeParams.concat([false])),
+                onComplete: resolve
+            });
+
+            const tween = TweenMax.to(component, duration, animParams);
+        });
+    }
+
+</script>
+</body>
+</html>

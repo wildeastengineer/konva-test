@@ -1,0 +1,314 @@
+
+skeleton.png
+size: 3185,626
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+mary_body
+  rotate: true
+  xy: 2, 6
+  size: 155, 144
+  orig: 155, 144
+  offset: 0, 0
+  index: -1
+mary_brow1
+  rotate: false
+  xy: 401, 165
+  size: 15, 8
+  orig: 15, 8
+  offset: 0, 0
+  index: -1
+mary_brow2
+  rotate: false
+  xy: 381, 165
+  size: 18, 8
+  orig: 18, 8
+  offset: 0, 0
+  index: -1
+mary_brush
+  rotate: false
+  xy: 890, 10
+  size: 828, 174
+  orig: 828, 174
+  offset: 0, 0
+  index: -1
+mary_eyes
+  rotate: true
+  xy: 2874, 279
+  size: 70, 18
+  orig: 70, 18
+  offset: 0, 0
+  index: -1
+mary_fx101
+  rotate: true
+  xy: 2793, 269
+  size: 64, 79
+  orig: 64, 79
+  offset: 0, 0
+  index: -1
+mary_fx102
+  rotate: true
+  xy: 2119, 4
+  size: 91, 111
+  orig: 91, 111
+  offset: 0, 0
+  index: -1
+mary_fx103
+  rotate: false
+  xy: 1720, 4
+  size: 153, 187
+  orig: 153, 187
+  offset: 0, 0
+  index: -1
+mary_fx104
+  rotate: true
+  xy: 2232, 8
+  size: 239, 293
+  orig: 239, 293
+  offset: 0, 0
+  index: -1
+mary_fx105
+  rotate: true
+  xy: 2793, 351
+  size: 273, 335
+  orig: 273, 335
+  offset: 0, 0
+  index: -1
+mary_fx106
+  rotate: false
+  xy: 2501, 268
+  size: 290, 356
+  orig: 290, 356
+  offset: 0, 0
+  index: -1
+mary_fx107
+  rotate: false
+  xy: 2194, 249
+  size: 305, 375
+  orig: 305, 375
+  offset: 0, 0
+  index: -1
+mary_fx108
+  rotate: false
+  xy: 1862, 219
+  size: 330, 405
+  orig: 330, 405
+  offset: 0, 0
+  index: -1
+mary_fx109
+  rotate: false
+  xy: 1509, 193
+  size: 351, 431
+  orig: 351, 431
+  offset: 0, 0
+  index: -1
+mary_fx110
+  rotate: false
+  xy: 381, 175
+  size: 367, 449
+  orig: 367, 449
+  offset: 0, 0
+  index: -1
+mary_fx111
+  rotate: false
+  xy: 2, 163
+  size: 377, 461
+  orig: 377, 461
+  offset: 0, 0
+  index: -1
+mary_fx201
+  rotate: false
+  xy: 2896, 203
+  size: 36, 34
+  orig: 36, 34
+  offset: 0, 0
+  index: -1
+mary_fx202
+  rotate: true
+  xy: 3130, 335
+  size: 36, 42
+  orig: 36, 42
+  offset: 0, 0
+  index: -1
+mary_fx203
+  rotate: true
+  xy: 3130, 409
+  size: 41, 46
+  orig: 41, 46
+  offset: 0, 0
+  index: -1
+mary_fx204
+  rotate: true
+  xy: 3130, 490
+  size: 43, 49
+  orig: 43, 49
+  offset: 0, 0
+  index: -1
+mary_fx205
+  rotate: false
+  xy: 3130, 572
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+mary_fx206
+  rotate: false
+  xy: 2894, 280
+  size: 66, 69
+  orig: 66, 69
+  offset: 0, 0
+  index: -1
+mary_fx207
+  rotate: true
+  xy: 3019, 27
+  size: 85, 83
+  orig: 85, 83
+  offset: 0, 0
+  index: -1
+mary_fx208
+  rotate: true
+  xy: 2927, 17
+  size: 95, 90
+  orig: 95, 90
+  offset: 0, 0
+  index: -1
+mary_fx209
+  rotate: true
+  xy: 3084, 227
+  size: 106, 99
+  orig: 106, 99
+  offset: 0, 0
+  index: -1
+mary_fx3
+  rotate: true
+  xy: 750, 186
+  size: 438, 757
+  orig: 438, 757
+  offset: 0, 0
+  index: -1
+mary_fx4
+  rotate: true
+  xy: 2527, 2
+  size: 264, 262
+  orig: 264, 262
+  offset: 0, 0
+  index: -1
+mary_hand1
+  rotate: false
+  xy: 3130, 373
+  size: 43, 34
+  orig: 43, 34
+  offset: 0, 0
+  index: -1
+mary_hand2
+  rotate: true
+  xy: 2896, 239
+  size: 39, 41
+  orig: 39, 41
+  offset: 0, 0
+  index: -1
+mary_hand3
+  rotate: true
+  xy: 3130, 535
+  size: 35, 50
+  orig: 35, 50
+  offset: 0, 0
+  index: -1
+mary_hand4
+  rotate: true
+  xy: 3130, 452
+  size: 36, 49
+  orig: 36, 49
+  offset: 0, 0
+  index: -1
+mary_head
+  rotate: true
+  xy: 1875, 7
+  size: 210, 242
+  orig: 210, 242
+  offset: 0, 0
+  index: -1
+mary_horn
+  rotate: false
+  xy: 2896, 4
+  size: 29, 108
+  orig: 29, 108
+  offset: 0, 0
+  index: -1
+mary_m0
+  rotate: true
+  xy: 2194, 231
+  size: 16, 12
+  orig: 16, 12
+  offset: 0, 0
+  index: -1
+mary_magic
+  rotate: true
+  xy: 148, 7
+  size: 154, 395
+  orig: 154, 395
+  offset: 0, 0
+  index: -1
+mary_wing1
+  rotate: false
+  xy: 545, 2
+  size: 144, 171
+  orig: 144, 171
+  offset: 0, 0
+  index: -1
+mary_wing2
+  rotate: true
+  xy: 691, 7
+  size: 166, 93
+  orig: 166, 93
+  offset: 0, 0
+  index: -1
+mary_wing3
+  rotate: false
+  xy: 786, 5
+  size: 102, 179
+  orig: 102, 179
+  offset: 0, 0
+  index: -1
+mary_wing4
+  rotate: false
+  xy: 3061, 114
+  size: 115, 111
+  orig: 115, 111
+  offset: 0, 0
+  index: -1
+vera_mouth2
+  rotate: true
+  xy: 2119, 97
+  size: 120, 103
+  orig: 120, 103
+  offset: 0, 0
+  index: -1
+vera_mouth3
+  rotate: true
+  xy: 2791, 146
+  size: 120, 103
+  orig: 120, 103
+  offset: 0, 0
+  index: -1
+vera_mouth4
+  rotate: true
+  xy: 2791, 24
+  size: 120, 103
+  orig: 120, 103
+  offset: 0, 0
+  index: -1
+vera_mouth5
+  rotate: false
+  xy: 2962, 246
+  size: 120, 103
+  orig: 120, 103
+  offset: 0, 0
+  index: -1
+vera_mouth6
+  rotate: false
+  xy: 2939, 141
+  size: 120, 103
+  orig: 120, 103
+  offset: 0, 0
+  index: -1

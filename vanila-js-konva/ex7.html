@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Konva.js Test Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+    </style>
+    <title>spine-threejs</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.js"></script>
+    <script src="/konva-test/libs/spine-webgl.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+
+    var lastFrameTime = Date.now() / 1000;
+    var canvas;
+    var shader;
+    var batcher;
+    var gl;
+    var mvp = new spine.webgl.Matrix4();
+    var assetManager;
+    var skeletonRenderer;
+    var debugRenderer;
+    var shapes;
+    var skeletons = {};
+    var activeSkeleton = "mari";
+
+
+    function init () {
+        // Setup canvas and WebGL context. We pass alpha: false to canvas.getContext() so we don't use premultiplied alpha when
+        // loading textures. That is handled separately by PolygonBatcher.
+        canvas = document.getElementById("canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var config = { alpha: false };
+        gl = canvas.getContext("webgl", config) || canvas.getContext("experimental-webgl", config);
+        if (!gl) {
+            alert('WebGL is unavailable.');
+            return;
+        }
+
+        // Create a simple shader, mesh, model-view-projection matrix and SkeletonRenderer.
+        shader = spine.webgl.Shader.newTwoColoredTextured(gl);
+        batcher = new spine.webgl.PolygonBatcher(gl);
+        mvp.ortho2d(0, 0, canvas.width - 1, canvas.height - 1);
+        skeletonRenderer = new spine.webgl.SkeletonRenderer(gl);
+        debugRenderer = new spine.webgl.SkeletonDebugRenderer(gl);
+        debugRenderer.drawRegionAttachments = true;
+        debugRenderer.drawBoundingBoxes = true;
+        debugRenderer.drawMeshHull = true;
+        debugRenderer.drawMeshTriangles = true;
+        debugRenderer.drawPaths = true;
+        debugShader = spine.webgl.Shader.newColored(gl);
+        shapes = new spine.webgl.ShapeRenderer(gl);
+        assetManager = new spine.webgl.AssetManager(gl);
+
+        // Tell AssetManager to load the resources for each model, including the exported .json file, the .atlas file and the .png
+        // file for the atlas. We then wait until all resources are loaded in the load() method.
+        assetManager.loadText("assets/spineboy.json");
+        assetManager.loadText("assets/spineboy.atlas");
+        assetManager.loadTexture("assets/spineboy.png");
+        assetManager.loadText("assets/raptor.json");
+        assetManager.loadText("assets/raptor.atlas");
+        assetManager.loadTexture("assets/raptor.png");
+        assetManager.loadText("assets/tank.json");
+        assetManager.loadText("assets/tank.atlas");
+        assetManager.loadTexture("assets/tank.png");
+        assetManager.loadText("assets/goblins-mesh.json");
+        assetManager.loadText("assets/goblins-mesh.atlas");
+        assetManager.loadTexture("assets/goblins.png");
+        assetManager.loadText("assets/vine.json");
+        assetManager.loadText("assets/vine.atlas");
+        assetManager.loadTexture("assets/vine.png");
+        assetManager.loadText("assets/stretchyman.json");
+        assetManager.loadText("assets/stretchyman.atlas");
+        assetManager.loadTexture("assets/stretchyman.png");
+
+
+        assetManager.loadText("assets/mari.json");
+        assetManager.loadText("assets/mari.atlas");
+        assetManager.loadTexture("assets/skeleton.png");
+        assetManager.loadTexture("assets/skeleton2.png");
+
+
+
+        requestAnimationFrame(load);
+    }
+
+    function load () {
+        // Wait until the AssetManager has loaded all resources, then load the skeletons.
+        if (assetManager.isLoadingComplete()) {
+            skeletons["mari"] = loadSkeleton("mari", "idle", false);
+            setupUI();
+            requestAnimationFrame(render);
+        } else {
+            requestAnimationFrame(load);
+        }
+    }
+
+    function loadSkeleton (name, initialAnimation, premultipliedAlpha, skin) {
+        if (skin === undefined) skin = "default";
+
+        // Load the texture atlas using name.atlas and name.png from the AssetManager.
+        // The function passed to TextureAtlas is used to resolve relative paths.
+
+        const atlasPath = "assets/" + name + ".atlas";
+        console.log("atlasPath", atlasPath);
+        atlas = new spine.TextureAtlas(assetManager.get(atlasPath), function(path) {
+            const assetPath = "assets/" + path;
+            console.log("assetPath", assetPath);
+
+            return assetManager.get(assetPath);
+        });
+
+        // Create a AtlasAttachmentLoader that resolves region, mesh, boundingbox and path attachments
+        atlasLoader = new spine.AtlasAttachmentLoader(atlas);
+
+        // Create a SkeletonJson instance for parsing the .json file.
+        var skeletonJson = new spine.SkeletonJson(atlasLoader);
+
+        // Set the scale to apply during parsing, parse the file, and create a new skeleton.
+        const skeletonDataPath = "assets/" + name + ".json";
+        console.log("skeletonDataPath", skeletonDataPath);
+        var skeletonData = skeletonJson.readSkeletonData(assetManager.get(skeletonDataPath));
+        var skeleton = new spine.Skeleton(skeletonData);
+        skeleton.setSkinByName(skin);
+        var bounds = calculateBounds(skeleton);
+
+        // Create an AnimationState, and set the initial animation in looping mode.
+        animationStateData = new spine.AnimationStateData(skeleton.data);
+        var animationState = new spine.AnimationState(animationStateData);
+        animationState.setAnimation(0, initialAnimation, true);
+        animationState.addListener({
+            start: function(track) {
+                console.log("Animation on track " + track.trackIndex + " started");
+            },
+            interrupt: function(track) {
+                console.log("Animation on track " + track.trackIndex + " interrupted");
+            },
+            end: function(track) {
+                console.log("Animation on track " + track.trackIndex + " ended");
+            },
+            disposed: function(track) {
+                console.log("Animation on track " + track.trackIndex + " disposed");
+            },
+            complete: function(track) {
+                console.log("Animation on track " + track.trackIndex + " completed");
+            },
+            event: function(track, event) {
+                console.log("Event on track " + track.trackIndex + ": " + JSON.stringify(event));
+            }
+        })
+
+        console.log("skeleton", skeleton);
+        skeleton.scaleX = 0.5;
+        skeleton.scaleY = 0.5;
+
+
+        // Pack everything up and return to caller.
+        return { skeleton: skeleton, state: animationState, bounds: bounds, premultipliedAlpha: premultipliedAlpha };
+    }
+
+    function calculateBounds(skeleton) {
+        skeleton.setToSetupPose();
+        skeleton.updateWorldTransform();
+        var offset = new spine.Vector2();
+        var size = new spine.Vector2();
+        skeleton.getBounds(offset, size, []);
+        return { offset: offset, size: size };
+    }
+
+    function setupUI () {
+        var skeletonList = $("#skeletonList");
+        for (var skeletonName in skeletons) {
+            var option = $("<option></option>");
+            option.attr("value", skeletonName).text(skeletonName);
+            if (skeletonName === activeSkeleton) option.attr("selected", "selected");
+            skeletonList.append(option);
+        }
+        var setupAnimationUI = function() {
+            var animationList = $("#animationList");
+            animationList.empty();
+            var skeleton = skeletons[activeSkeleton].skeleton;
+            var state = skeletons[activeSkeleton].state;
+            var activeAnimation = state.tracks[0].animation.name;
+            for (var i = 0; i < skeleton.data.animations.length; i++) {
+                var name = skeleton.data.animations[i].name;
+                var option = $("<option></option>");
+                option.attr("value", name).text(name);
+                if (name === activeAnimation) option.attr("selected", "selected");
+                animationList.append(option);
+            }
+
+            animationList.change(function() {
+                var state = skeletons[activeSkeleton].state;
+                var skeleton = skeletons[activeSkeleton].skeleton;
+                var animationName = $("#animationList option:selected").text();
+                skeleton.setToSetupPose();
+                state.setAnimation(0, animationName, true);
+            })
+        }
+
+        var setupSkinUI = function() {
+            var skinList = $("#skinList");
+            skinList.empty();
+            var skeleton = skeletons[activeSkeleton].skeleton;
+            var activeSkin = skeleton.skin == null ? "default" : skeleton.skin.name;
+            for (var i = 0; i < skeleton.data.skins.length; i++) {
+                var name = skeleton.data.skins[i].name;
+                var option = $("<option></option>");
+                option.attr("value", name).text(name);
+                if (name === activeSkin) option.attr("selected", "selected");
+                skinList.append(option);
+            }
+
+            skinList.change(function() {
+                var skeleton = skeletons[activeSkeleton].skeleton;
+                var skinName = $("#skinList option:selected").text();
+                skeleton.setSkinByName(skinName);
+                skeleton.setSlotsToSetupPose();
+            })
+        }
+
+        skeletonList.change(function() {
+            activeSkeleton = $("#skeletonList option:selected").text();
+            setupAnimationUI();
+            setupSkinUI();
+        })
+        setupAnimationUI();
+        setupSkinUI();
+    }
+
+    function render () {
+        var now = Date.now() / 1000;
+        var delta = now - lastFrameTime;
+        lastFrameTime = now;
+
+        // Update the MVP matrix to adjust for canvas size changes
+        resize();
+
+        gl.clearColor(0.3, 0.3, 0.3, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        batcher.begin(shader);
+
+        for (let j = 0; j < 6; j++) {
+            for (let i = 0; i < 12; i++) {
+                // Apply the animation state based on the delta time.
+                var state = skeletons[activeSkeleton].state;
+                var skeleton = skeletons[activeSkeleton].skeleton;
+                var premultipliedAlpha = skeletons[activeSkeleton].premultipliedAlpha;
+
+                skeleton.x = -550 + i * 100;
+                skeleton.y = 300 - j * 100;
+
+
+                if (i === 0 && j === 0) {
+                    state.update(delta);
+                    state.apply(skeleton);
+                }
+
+                skeleton.updateWorldTransform();
+
+                // Bind the shader and set the texture and model-view-projection matrix.
+                shader.bind();
+                shader.setUniformi(spine.webgl.Shader.SAMPLER, 0);
+                shader.setUniform4x4f(spine.webgl.Shader.MVP_MATRIX, mvp.values);
+
+                // Start the batch and tell the SkeletonRenderer to render the active skeleton.
+
+                skeletonRenderer.premultipliedAlpha = premultipliedAlpha;
+                skeletonRenderer.draw(batcher, skeleton);
+
+            }
+        }
+
+
+        batcher.end();
+        shader.unbind();
+
+        // draw debug information
+        debugShader.bind();
+        debugShader.setUniform4x4f(spine.webgl.Shader.MVP_MATRIX, mvp.values);
+        debugRenderer.premultipliedAlpha = premultipliedAlpha;
+        shapes.begin(debugShader);
+        // debugRenderer.draw(shapes, skeleton);
+        shapes.end();
+        debugShader.unbind();
+
+        requestAnimationFrame(render);
+    }
+
+    let fpsList = [];
+    let lastTimestamp = Date.now();
+
+    let setFps = throttle((fps) => {
+        fpsList.push(fps);
+    }, 100);
+
+    setTimeout(() => {
+        console.log("fps", JSON.stringify(fpsList));
+    }, 6000);
+
+    setTimeout(() => {
+        requestAnimationFrame(takeFps);
+    }, 1000);
+
+    function takeFps(timestamp) {
+        const delta = timestamp - lastTimestamp;
+        const frameRate = Math.round(1000 / delta);
+
+        lastTimestamp = timestamp;
+
+        setFps(frameRate);
+
+        requestAnimationFrame(takeFps);
+    }
+
+    function throttle(func, ms) {
+        let isThrottled = false,
+            savedArgs,
+            savedThis;
+
+        function wrapper() {
+            if (isThrottled) {
+                savedArgs = arguments;
+                savedThis = this;
+                return;
+            }
+
+            func.apply(this, arguments);
+
+            isThrottled = true;
+
+            setTimeout(function () {
+                isThrottled = false;
+                if (savedArgs) {
+                    wrapper.apply(savedThis, savedArgs);
+                    savedArgs = savedThis = null;
+                }
+            }, ms);
+        }
+
+        return wrapper;
+    }
+
+    function resize () {
+        var w = canvas.clientWidth;
+        var h = canvas.clientHeight;
+        var bounds = skeletons[activeSkeleton].bounds;
+        if (canvas.width != w || canvas.height != h) {
+            canvas.width = w;
+            canvas.height = h;
+        }
+
+        // magic
+        var centerX = bounds.offset.x + bounds.size.x / 2;
+        var centerY = bounds.offset.y + bounds.size.y / 2;
+        var scaleX = bounds.size.x / canvas.width;
+        var scaleY = bounds.size.y / canvas.height;
+        var scale = Math.max(scaleX, scaleY) * 1.2;
+        if (scale < 1) scale = 1;
+        var width = canvas.width * scale;
+        var height = canvas.height * scale;
+
+        mvp.ortho2d(centerX - width / 2, centerY - height / 2, width, height);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+
+    (function() {
+        init();
+    })();
+
+</script>
+</body>
+</html>
